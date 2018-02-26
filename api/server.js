@@ -30,6 +30,7 @@ const typeDefs = `
   type Book {
     id: ID!
     title: String
+    sales: Int
     author: String
     description: String
   }
@@ -37,15 +38,26 @@ const typeDefs = `
     book(id: ID!): Book
     bookList: [Book]
   }
+  type Mutation {
+    bumpSales(id: ID!): [Book]
+  }
 `;
 const resolvers = {
   Query: {
-    book(_, { id }) {
+    book(_, {id}) {
       return booksDb.find(book => book.id === id);
     },
     bookList() {
       return booksDb;
     },
+  },
+  Mutation: {
+    bumpSales(_, { id }) {
+      console.log(`bumping sales for ${id}`);
+      const book = booksDb.find(book => book.id === id);
+      book.sales = book.sales + 1;
+      return booksDb;
+    }
   },
 };
 const schema = makeExecutableSchema({

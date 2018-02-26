@@ -7,7 +7,8 @@
     <h2>All the books</h2>
     <ul v-for="book in bookList" :key="book.id">
       <li>
-        <strong>{{ book.title }}</strong> by {{ book.author }}
+        <strong>{{ book.title }}</strong> by {{ book.author }} - sold {{ book.sales }} copies
+          <button @click="bumpCopies(book.id)">Bump it!</button>
         <p> {{ book.description }}</p>
       </li>
     </ul>
@@ -25,6 +26,11 @@ export default {
   beforeCreate() {
     this.$store.dispatch('fetchBook', 1);
     this.$store.dispatch('fetchBookList');
+  },
+  methods: {
+    bumpCopies(bookId) {
+      this.$store.dispatch('bumpBookSales', bookId);
+    }
   }
 }
 </script>
